@@ -10,5 +10,5 @@ paths = tree.xpath('//dir/@path')
 calchome = os.getcwd()
 for path in paths:
     os.chdir(path)
-    os.system('$VASPHOME/vasp')
+    os.system('$VASPHOME/vasp.5.3/vasp')
     os.chdir(calchome)
