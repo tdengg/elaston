@@ -52,14 +52,15 @@ class POS(object):
         return l
     
     def write_pos(self, pos, fileName):
+        
         posout = open(fileName, 'w')
         posout.write('COMMENT!\n')
         posout.write(str(pos['scale']) + '\n')
+        for i in range(3): posout.write(str(pos['vlatt_0'][i]) + ' ')
+        posout.write('\n')
         for i in range(3): posout.write(str(pos['vlatt_1'][i]) + ' ')
         posout.write('\n')
         for i in range(3): posout.write(str(pos['vlatt_2'][i]) + ' ')
-        posout.write('\n')
-        for i in range(3): posout.write(str(pos['vlatt_3'][i]) + ' ')
         posout.write('\n')
         for n in pos['natoms']: posout.write(str(n) + ' ')
         posout.write('\n')
@@ -101,9 +102,9 @@ class POS(object):
         if pos["csystem"] in ['d','D']:
             for i in range(len(pos["natoms"])):
                 for j in range(pos["natoms"][i]):
-                    print pos["vbasis"]["species_" + str(i+1)][j]
+                    
                     f.write(pos["vbasis"]["species_" + str(i+1)][j][0] + ' ' + pos["vbasis"]["species_" + str(i+1)][j][1] + ' ' + pos["vbasis"]["species_" + str(i+1)][j][2] + '\n')
-                    f.write('Species_' + str(i+1))
+                    f.write('Species_' + str(i+1) + '\n')
         else: print 'Basis vectors in Cartesian coordinates not supported yet!!! \n NOT WRITTEN TO sgroup.in!!!!!'
         f.close()
     

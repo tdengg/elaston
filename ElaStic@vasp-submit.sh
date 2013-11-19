@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-EXECUTABLE=$EXCITINGROOT/bin/excitingser
+EXECUTABLE=$VASPROOT/vasp
 
 label=`ls -d Dst??`
 for Dstn in $label ; do
@@ -8,7 +8,10 @@ for Dstn in $label ; do
     Dstn_num_list=`ls -d ${Dstn}_??`
     for Dstn_num in $Dstn_num_list ; do
         cd $Dstn_num/
-        cp -f $Dstn_num.xml input.xml
+        cp -f $Dstn_num POSCAR
+	cp ../../POTCAR .
+	cp ../../KPOINTS .
+	cp ../../INCAR .
         echo
         echo '        +--------------------------------------+'
         echo '        | SCF calculation of "'${Dstn_num}'" starts |'

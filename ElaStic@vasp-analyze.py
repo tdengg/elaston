@@ -33,11 +33,14 @@ import os
 import lxml.etree as et
 
 #%%%%%%%%--- CONSTANTS ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-_e     = 1.602176565e-19              # elementary charge
-Bohr   = 5.291772086e-11              # a.u. to meter
-Ryd2eV = 13.605698066                 # Ryd to eV
-cnvrtr = (_e*Ryd2eV)/(1e9*Bohr**3)    # Ryd/[a.u.^3] to GPa
+#_e     = 1.602176565e-19              # elementary charge
+#Bohr   = 5.291772086e-11              # a.u. to meter
+#Ryd2eV = 13.605698066                 # Ryd to eV
+#cnvrtr = (_e*Ryd2eV)/(1e9*Bohr**3)    # Ryd/[a.u.^3] to GPa
 #--------------------------------------------------------------------------------------------------
+_e     = 1.602176565e-19
+Angstroem = 1.e-10
+cnvrtr = (_e)/(1e9*Angstroem**3)    # ev/[Anstroem^3] to GPa
 
 #%%%--- SUBROUTINS AND FUNCTIONS ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 def sortlist(lst1, lst2):
@@ -150,6 +153,9 @@ else: sys.exit('\n     ... Oops ERROR: WRONG Space-Group Number !?!?!?    \n')
 #--------------------------------------------------------------------------------------------------
 
 #%%%--- Reading the energies ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+xmlf = open('Energy.xml', 'w')
+root = et.Element("Energy_Strain")
+
 for i in range(1, ECs+1):
     if (i<10):
         Dstn = 'Dst0'+ str(i)
@@ -160,7 +166,9 @@ for i in range(1, ECs+1):
     os.chdir(Dstn)
 
     f = open(Dstn+'_Energy.dat', 'w')
-
+    ##### xml-output #####
+    root.append(et.Element(Dstn))
+    selm = et.SubElement(root, Dstn)
     for j in range(1, NoP+1):
         if (j<10):
             Dstn_num = Dstn +'_0'+str(j)
@@ -171,6 +179,7 @@ for i in range(1, ECs+1):
             os.chdir(Dstn_num)
 
             if (os.path.exists('vasprun.xml')):
+                print "Open vasp output file: " + os.getcwd() + '/vasprun.xml'
                 vaspout = et.parse('vasprun.xml')
                 elem = vaspout.xpath("//scstep[last()]/energy/i[@name = 'e_0_energy']")
                 energy = float(elem[0].text)
@@ -185,9 +194,19 @@ for i in range(1, ECs+1):
             else:
                 strain = '%13.10f'%r
             print >>f, strain,'   ', energy
+            ##### xml-output ####
+            entry = et.SubElement(selm, Dstn_num)
+            entry.set('strain', str(strain))
+            entry.set('energy', str(energy))
+            entry.set('dst', str(i))
+            entry.set('number', str(j))
+            
             os.chdir('../')
     f.close()
+    
     os.chdir('../')
+xmlf.write(et.tostring(root, pretty_print=True))
+xmlf.close()
 #--------------------------------------------------------------------------------------------------
 
 warnings.simplefilter('ignore', np.RankWarning)

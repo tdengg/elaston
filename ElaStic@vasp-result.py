@@ -20,7 +20,7 @@
 
 import sys
 import os
-
+import ElaStic_Result_Energy_2nd
 #%%%--- Checking the INFO_ElaStic exist ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 if (os.path.exists('INFO_ElaStic') == False):
     sys.exit('\n     ... Oops ERROR: Where is the "INFO_ElaStic" file !?!?!?    \n')
@@ -57,5 +57,5 @@ if (ordr == 3):
 
 #--------------------------------------------------------------------------------------------------------------------------------
 
-if (mthd == 'Energy' and ordr == 2): os.system('ElaStic_Result_Energy_2nd.py')
+if (mthd == 'Energy' and ordr == 2): ElaStic_Result_Energy_2nd.RESULT()
 if (mthd == 'Energy' and ordr == 3): os.system('ElaStic_Result_Energy_3rd.py')

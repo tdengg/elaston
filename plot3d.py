@@ -23,11 +23,18 @@ class Plot3d(object):
             Y.append([])
             for j in range(len(self.X)): Y[i].append(self.Y[i])
         
-        # Generate Y array #
+        # Generate Z array #
         k = 1
         for i in range(len(self.Y)):
             Z.append([])
-            for j in range(len(self.X)): Z[i].append(self.Z[str(k)]); k+=1
+            for j in range(len(self.X)): 
+                for subdirs in self.Z.values():
+                    
+                    if subdirs['ngridk'] == float(X[i][j]) and subdirs['swidth'] == float(Y[i][j]):
+                        print X[i][j], Y[i][j]
+                        print self.Z[str(k)][self.title]
+                        Z[i].append(self.Z[str(k)][self.title]) 
+                k+=1
         
         #X = [[6,10,15,18,21,25],[6,10,15,18,21,25],[6,10,15,18,21,25]]
         #Y = [[0.002,0.002,0.002,0.002,0.002,0.002],[0.01,0.01,0.01,0.01,0.01,0.01],[0.05,0.05,0.05,0.05,0.05,0.05]]
@@ -35,6 +42,7 @@ class Plot3d(object):
         X=np.array(X)
         Y=np.array(Y)
         Z=np.array(Z)
+        print X, Y, Z
         ax.plot_wireframe(X, Y, Z)
         label = ["0.05","0.01","0.002"]
         for i in range(len(X)): ax1.plot(self.X,Z[i],label=label[i])
