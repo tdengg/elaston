@@ -1,0 +1,1 @@
+{'vasphome':'/home/MCL/t.dengg/bin/vasp/vasp.5.3'}

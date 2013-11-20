@@ -167,8 +167,8 @@ for i in range(1, ECs+1):
 
     f = open(Dstn+'_Energy.dat', 'w')
     ##### xml-output #####
-    root.append(et.Element(Dstn))
     selm = et.SubElement(root, Dstn)
+    ######################
     for j in range(1, NoP+1):
         if (j<10):
             Dstn_num = Dstn +'_0'+str(j)
@@ -200,7 +200,7 @@ for i in range(1, ECs+1):
             entry.set('energy', str(energy))
             entry.set('dst', str(i))
             entry.set('number', str(j))
-            
+            #####################
             os.chdir('../')
     f.close()
     
