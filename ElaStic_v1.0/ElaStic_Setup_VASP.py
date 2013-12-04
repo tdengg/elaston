@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
-#%%%--------------------------------- ElaStic@vasp-setup ----------------------------------%%%#
+#%%%--------------------------------- ElaStic@vasp-setup --------------------------------------%%%#
 #%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%#
 #
 # AUTHORS:
@@ -11,7 +11,7 @@
 # Sun Jan 01 00:00:00 2012
 #
 # SYNTAX:
-# python ElaStic@vasp-setup.py
+# python ElaStic_Setup_VASP.py
 #        ElaStic@vasp-setup
 # 
 # EXPLANATION:
@@ -179,12 +179,12 @@ class SETUP(object):
         #--------------------------------------------------------------------------------------------------
         
         o_poscar = vaspIO.POS(INF)
-        poscar = o_poscar.read_pos() 				# Generate sgroup.out from POSCAR file                    ###MOD
-        o_poscar.write_sgroup(poscar)				# --"--
+        poscar = o_poscar.read_pos()                 # Generate sgroup.out from POSCAR file                    ###MOD
+        o_poscar.write_sgroup(poscar)                # --"--
         os.system('sgroup sgroup.in 1> sgroup.out 2> sgroup.err')
         #%%%--- Calculate Space-group number and classify it ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         os.system('less sgroup.in ')
-        #os.system('rm -f sgroup.in ')
+        os.system('rm -f sgroup.in ')
         
         if (os.path.getsize('sgroup.err') != 0):
             fer  = open('sgroup.err', 'r')

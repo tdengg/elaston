@@ -151,7 +151,7 @@ class RESULT():
         l3  = INFO.readline()
         cod = l3.split()[-1]
         
-        if (cod != 'WIEN2k' and cod != 'exciting' and cod != 'ESPRESSO'):
+        if (cod != 'WIEN2k' and cod != 'exciting' and cod != 'ESPRESSO' and cod != 'vasp'):
             sys.exit('\n.... Oops ERROR: The DFT code is NOT clear !?!?!?'\
                      '\n                 Something is WRONG in the "INFO_ElaStic" file.\n')
         

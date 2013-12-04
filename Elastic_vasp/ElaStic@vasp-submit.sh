@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-EXECUTABLE=$VASPROOT/vasp
+EXECUTABLE=$VASPHOME/vasp.5.3/vasp
 
 label=`ls -d Dst??`
 for Dstn in $label ; do

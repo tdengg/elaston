@@ -136,7 +136,7 @@ backend      : qt4agg
 # settings for axes and ticks. Special text sizes can be defined
 # relative to font.size, using the following values: xx-small, x-small,
 # small, medium, large, x-large, xx-large, larger, or smaller
-font.size           : 20
+font.size           : 12
 #font.serif          : Bitstream Vera Serif, New Century Schoolbook, Century Schoolbook L, Utopia, ITC Bookman, Bookman, Nimbus Roman No9 L, Times New Roman, Times, Palatino, Charter, serif
 #font.sans-serif     : Bitstream Vera Sans, Lucida Grande, Verdana, Geneva, Lucid, Arial, Helvetica, Avant Garde, sans-serif
 #font.cursive        : Apple Chancery, Textile, Zapf Chancery, Sand, cursive
@@ -263,8 +263,8 @@ font.size           : 20
 #xtick.minor.size     : 2      # minor tick size in points
 #xtick.major.width    : 0.5    # major tick width in points
 #xtick.minor.width    : 0.5    # minor tick width in points
-#xtick.major.pad      : 4      # distance to major tick label in points
-#xtick.minor.pad      : 4      # distance to the minor tick label in points
+xtick.major.pad      : 6     # distance to major tick label in points
+xtick.minor.pad      : 6      # distance to the minor tick label in points
 #xtick.color          : k      # color of the tick labels
 #xtick.labelsize      : medium # fontsize of the tick labels
 #xtick.direction      : in     # direction: in, out, or inout
@@ -273,8 +273,8 @@ font.size           : 20
 #ytick.minor.size     : 2      # minor tick size in points
 #ytick.major.width    : 0.5    # major tick width in points
 #ytick.minor.width    : 0.5    # minor tick width in points
-#ytick.major.pad      : 4      # distance to major tick label in points
-#ytick.minor.pad      : 4      # distance to the minor tick label in points
+ytick.major.pad      : 6      # distance to major tick label in points
+ytick.minor.pad      : 6      # distance to the minor tick label in points
 #ytick.color          : k      # color of the tick labels
 #ytick.labelsize      : medium # fontsize of the tick labels
 #ytick.direction      : in     # direction: in, out, or inout
