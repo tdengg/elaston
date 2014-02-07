@@ -423,7 +423,8 @@ class RESULT():
             CONV = cnvrtr * 1.
         if (cod == 'ESPRESSO'):
             CONV = cnvrtr * 1.
-        
+        if (cod == 'vasp'):
+            CONV = cnvrtr * 1.
         for i in range(5):
             for j in range(i+1,6):
                 C[j,i] = C[i,j] 

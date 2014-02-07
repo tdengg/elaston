@@ -38,7 +38,7 @@ print '\
 \n     VASP      ---------=>  4'
 
 num = input('>>>> Please choose (1, 2, 3 or 4): ')
-if (num != 1 and num != 2 and num != 3 ):
+if (num != 1 and num != 2 and num != 3 and num !=4 ):
     sys.exit('\n.... Oops ERROR: Choose 1, 2, 3, or 4 \n')
 
 if (num == 1): cod = 'exciting'
@@ -49,4 +49,6 @@ if (num == 4): cod = 'VASP'
 if (cod == 'exciting'): os.system('ElaStic_Setup_exciting'   )
 if (cod == 'WIEN2k'  ): os.system('ElaStic_Setup_WIEN2k'     )
 if (cod == 'ESPRESSO'): os.system('ElaStic_Setup_ESPRESSO'   )
-if (cod == 'VASP'    ): os.system('ElaStic_Setup_ESPRESSO.py')
+if (cod == 'VASP'    ): 
+    import ElaStic_Setup_VASP
+    ElaStic_Setup_VASP.SETUP()

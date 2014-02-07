@@ -10,6 +10,7 @@ class POS(object):
         p_dict["name"] = self.car.readline()
         
         scale = self.lta()[0]
+        print scale
         try:
             scale = np.float(scale)
         except:
@@ -52,6 +53,7 @@ class POS(object):
     def lta(self):
         line = self.car.readline()
         l = line.split()
+        
         for i in range(len(l)):
             if l[i] in [' ','\n','']: l.pop(i)
             else: continue
@@ -96,7 +98,7 @@ class POS(object):
         f = open('sgroup.in','w')
         
         f.write('P\n')
-        
+        print pos["vlatt_2"], pos["scale"]
         a = np.sqrt((pos["vlatt_1"][0])**2. + (pos["vlatt_1"][1])**2. + (pos["vlatt_1"][2])**2.) * pos["scale"]
         b = np.sqrt((pos["vlatt_2"][0])**2. + (pos["vlatt_2"][1])**2. + (pos["vlatt_2"][2])**2.) * pos["scale"]
         c = np.sqrt((pos["vlatt_3"][0])**2. + (pos["vlatt_3"][1])**2. + (pos["vlatt_3"][2])**2.) * pos["scale"]

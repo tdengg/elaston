@@ -107,7 +107,7 @@ class SearchDir(object):
         return  ctxtinfo          
 
 ##test        
-search = SearchDir(["vasprun.xml"],"/home/MCL/t.dengg/calc/elastic/Ti_vasp_81_ha/", True)    # usage: SearchDir([file1,file2,...])    
+search = SearchDir(["vasprun.xml"],"/home/MCL/t.dengg/calc/phonons_vasp/DFPT/W/conv_cell/s6x6x6/expansion/", True)    # usage: SearchDir([file1,file2,...])    
 search.search()
 
 

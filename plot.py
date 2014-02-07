@@ -119,11 +119,11 @@ if __name__ == '__main__':
         for n in range(31):
             try:
                 
-                C11.append(float(json.loads(tree.xpath("//*[@n='%s'and @gmaxvr]/@SM"%n)[0])[0])) #//*[@n='%s'and @swidth='0.01']/@SM
-                C12.append(float(json.loads(tree.xpath("//*[@n='%s'and @gmaxvr]/@SM"%n)[0])[1]))
-                C13.append(float(json.loads(tree.xpath("//*[@n='%s'and @gmaxvr]/@SM"%n)[0])[2]))
-                C44.append(float(json.loads(tree.xpath("//*[@n='%s'and @gmaxvr]/@SM"%n)[0])[21]))
-                X.append(tree.xpath("//*[@n='%s']/@gmaxvr"%n)[0])
+                C11.append(float(json.loads(tree.xpath("//*[@n='%s'and @ngridk and @swidth='0.01']/@SM"%n)[0])[0])) #//*[@n='%s'and @swidth='0.01']/@SM
+                C12.append(float(json.loads(tree.xpath("//*[@n='%s'and @ngridk and @swidth='0.01']/@SM"%n)[0])[1]))
+                C13.append(float(json.loads(tree.xpath("//*[@n='%s'and @ngridk and @swidth='0.01']/@SM"%n)[0])[2]))
+                C44.append(float(json.loads(tree.xpath("//*[@n='%s'and @ngridk and @swidth='0.01']/@SM"%n)[0])[21]))
+                X.append(tree.xpath("//*[@n='%s']/@ngridk"%n)[0])
             except:
                 continue
             

@@ -3,12 +3,13 @@ import lxml.etree as et
 workdir = os.getcwd()
 import search_vasprun
 os.chdir(workdir)
-
-search_vasprun.SearchDir(["POSCAR"],"./", True)
-
-tree = et.parse('calc_filelist.xml')
+print os.getcwd()+'/'
+search_vasprun.SearchDir(['vasprun.xml'],workdir+'/', True)
+os.chdir(workdir)
+print os.getcwd()
+tree = et.parse(workdir+'/calc_filelist.xml')
 paths = tree.xpath('//dir/@path')
-calchome = os.getcwd()
+calchome = workdir
 for path in paths:
     os.chdir(path)
     

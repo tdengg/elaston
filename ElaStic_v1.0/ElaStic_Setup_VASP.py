@@ -330,6 +330,7 @@ class SETUP(object):
             bv.append(map(float,basevect.split()))
         """
         bv = [poscar["vlatt_1"],poscar["vlatt_2"],poscar["vlatt_3"]]
+        print bv
         M_old= np.array(bv)
         D    = np.linalg.det(M_old)
         V0   = abs(poscar['scale']**3*D)
@@ -531,7 +532,7 @@ class SETUP(object):
                 for j in range(3):
                     bdummy = '%22.16f'%(M_new[j,0]) + '%22.16f'%(M_new[j,1]) + '%22.16f'%(M_new[j,2])+' '
                     print>>fdis, 'V' + str(j+1) + ' --=> ' + bdummy
-                    poscar["vlatt_%s"%j] = [M_new[j,0],M_new[j,1],M_new[j,2]]
+                    poscar["vlatt_%s"%(j+1)] = [M_new[j,0],M_new[j,1],M_new[j,2]]
                 print>>fdis
         
                 os.mkdir(Dstn_cont2)
@@ -541,6 +542,9 @@ class SETUP(object):
                 fileName = Dstn_cont2 + 'POSCAR'             
                 o_poscar.write_pos(poscar, fileName)
                 os.system('cp %s'%fileName + ' POSCAR')
+                os.system('cp ../../KPOINTS .')
+                os.system('cp ../../INCAR .')
+                os.system('cp ../../POTCAR .')
                 #------------------------------------------------------------------------------------------
                 os.chdir('../')
             os.chdir('../')

@@ -5,7 +5,7 @@ import copy
 import sys
 try:
     if sys.argv[1] == 'elastic':
-        import ElaStic_vasp_setup
+        import ElaStic_Setup_VASP
         elastic = True
         ponpy = False
     elif sys.argv[1] == 'phonopy':
@@ -44,21 +44,31 @@ def gen_subdirs(fileName, par, val, dic):
 
 o_poscar = vread.POS('POSCAR')
 poscar = o_poscar.read_pos()
-
+print str(poscar['scale'])
 if type(convert(json.loads(str(poscar['scale'])))) == list:
     poscar['scale'] = convert(json.loads(str(poscar['scale'])))
     gen_subdirs('POSCAR','scale',poscar['scale'],poscar)
+    if elastic:
+        for v in poscar['scale']:
+                
+                os.chdir("scale" + "_%s"%v)
+                
+                ElaStic_Setup_VASP.SETUP()
+                os.chdir("..")
     
 
 o_incar = vread.POS('INCAR')
 incar = o_incar.read_in()
 
 for par in incar.keys():
+    
     if incar[par].startswith('[') and type(convert(json.loads(incar[par]))) == list: 
         incar[par] = convert(json.loads(incar[par]))
         gen_subdirs('INCAR', par,incar[par],incar)
         if elastic:
             for v in incar[par]:
+                
                 os.chdir("%s"%par.strip() + "_%s"%v)
-                ElaStic_vasp_setup.SETUP()
+                
+                ElaStic_Setup_VASP.SETUP()
                 os.chdir("..")

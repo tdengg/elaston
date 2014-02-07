@@ -8,7 +8,14 @@ class POS(object):
     def read_pos(self):
         p_dict = {}
         p_dict["name"] = self.car.readline()
-        p_dict["scale"] = np.float(self.lta()[0]) #Volume if < 0
+        
+        scale = self.lta()[0]
+        try:
+            scale = np.float(scale)
+        except:
+            print 'Found list of lattice parameters'
+        p_dict["scale"] = scale #Volume if < 0
+        
         p_dict["vlatt_1"] = np.array(map(np.float,self.lta()))
         p_dict["vlatt_2"] = np.array(map(np.float,self.lta()))
         p_dict["vlatt_3"] = np.array(map(np.float,self.lta()))
@@ -56,11 +63,11 @@ class POS(object):
         posout = open(fileName, 'w')
         posout.write('COMMENT!\n')
         posout.write(str(pos['scale']) + '\n')
-        for i in range(3): posout.write(str(pos['vlatt_0'][i]) + ' ')
-        posout.write('\n')
         for i in range(3): posout.write(str(pos['vlatt_1'][i]) + ' ')
         posout.write('\n')
         for i in range(3): posout.write(str(pos['vlatt_2'][i]) + ' ')
+        posout.write('\n')
+        for i in range(3): posout.write(str(pos['vlatt_3'][i]) + ' ')
         posout.write('\n')
         for n in pos['natoms']: posout.write(str(n) + ' ')
         posout.write('\n')
@@ -69,8 +76,10 @@ class POS(object):
         posout.write(pos['csystem'] + '\n')
         
         for n in range(len(pos["vbasis"])): 
-            for s in pos['vbasis']["species_%s"%(str(n+1))]: 
-                for i in range(6): posout.write(s[i] + ' ')
+            
+            for s in pos['vbasis']["species_%s"%(str(n+1))]:
+                for l in s: 
+                    for i in range(len(l)): posout.write(l[i] + ' ')
                 posout.write('\n')
                 
         posout.close()

@@ -46,23 +46,23 @@ class SearchDir(object):
                     os.chdir(os.getcwd() + '/' + dir)
                     subDir = os.listdir(os.curdir)
                     
-                    if os.path.exists('info.xml'):
+                    if os.path.exists('vasprun.xml'):
                         infostatus = 'OK'
                     else:
-                        infostatus = 'NO info.xml'
+                        infostatus = 'NO vasprun.xml'
                     
                     i=0
                     while i < len(self.files):
-                        if os.path.exists(self.files[i]) and os.path.exists("info.xml") and os.path.exists("input.xml"):
-                            docinfo = ET.parse(self.files[i])   #reading xml-file
-                            ctxtinfo.append(docinfo)
-                            if self.files[i] == 'info.xml':
-                                status = docinfo.find('/groundstate').get('status')
-                            #print(os.stat("info.xml"))
+                        if os.path.exists(self.files[i]) and os.path.exists("vasprun.xml") and os.path.exists("POSCAR"):
+                            #docinfo = ET.parse(self.files[i])   #reading xml-file
+                            #ctxtinfo.append(docinfo)
+                            #if self.files[i] == 'info.xml':
+                            #    status = docinfo.find('/groundstate').get('status')
+                            print(os.stat("vasprun.xml"))
                         #    print(self.files[i] + " exists")
-                        elif os.path.exists(self.files[i]) and not os.path.exists("info.xml"):
+                        elif os.path.exists(self.files[i]) and not os.path.exists("vasprun.xml"):
                             print("no info file " + os.getcwd())
-                        elif os.path.exists(self.files[i]) and not os.path.exists("input.xml"):
+                        elif os.path.exists(self.files[i]) and not os.path.exists("POSCAR"):
                             print("no input file " + os.getcwd())
                         i=i+1
                     
@@ -71,11 +71,11 @@ class SearchDir(object):
                         except:
                             error = None
                     
-                    if os.path.exists("input.xml") and self.xmlout == True:                       #1                        
+                    if os.path.exists("POSCAR") and self.xmlout == True:                       #1                        
                         dirx.append(doc.createElement("dir"))                                     #1
                         dirx[self.n].setAttribute("id", "calc %i" %(self.n))            #1
                         dirx[self.n].setAttribute("path", "%s" %(os.getcwd() + '/'))    #1
-                        dirx[self.n].setAttribute("info.xml", str(infostatus))
+                        dirx[self.n].setAttribute("vasprun.xml", str(infostatus))
                         if os.path.exists("info.xml"):
                             dirx[self.n].setAttribute("status", str(status))                     #1
                         if error:
@@ -83,17 +83,6 @@ class SearchDir(object):
                         rootx.appendChild(dirx[self.n])                                 #1                        
                         self.n=self.n+1                                                 #1
                         
-                    if os.path.exists("POSCAR") and self.xmlout == True:
-                        dirx.append(doc.createElement("dir"))                                     #1
-                        dirx[self.n].setAttribute("id", "calc %i" %(self.n))            #1
-                        dirx[self.n].setAttribute("path", "%s" %(os.getcwd() + '/'))    #1
-                        dirx[self.n].setAttribute("info.xml", str(infostatus))
-                        if os.path.exists("info.xml"):
-                            dirx[self.n].setAttribute("status", str(status))                     #1
-                        if error:
-                            dirx[self.n].setAttribute("error", str(error)) 
-                        rootx.appendChild(dirx[self.n])                                 #1                        
-                        self.n=self.n+1
                     recsearch(self, subDir)
             os.chdir(os.pardir)
             return  ctxtinfo
@@ -107,7 +96,7 @@ class SearchDir(object):
         return  ctxtinfo          
 
 ##test        
-search = SearchDir(["info.xml"],"/home/MCL/t.dengg/calc/Al_new/31/", True)    # usage: SearchDir([file1,file2,...])    
+search = SearchDir(["vasprun.xml","POSCAR"],"/home/MCL/t.dengg/calc/W/kpoints_24/Cij_0k_conv/expansion/", True)    # usage: SearchDir([file1,file2,...])    
 search.search()
 
 
