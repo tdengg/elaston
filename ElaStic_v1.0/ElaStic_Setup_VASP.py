@@ -368,7 +368,7 @@ class SETUP(object):
             if (ordr == 2):
                 if (LC == 'CI' or \
                     LC == 'CII'):
-                    Lag_strain_list = ['01','08','23']
+                    Lag_strain_list = ['08','23']#['01','08','23']
                 if (LC == 'HI' or \
                     LC == 'HII'):
                     Lag_strain_list = ['01','26','04','03','17']

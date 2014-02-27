@@ -208,6 +208,8 @@ for i in range(1, ECs+1):
                     vaspout = et.parse('vasprun.xml')
                     elem = vaspout.xpath("//scstep[last()]/energy/i[@name = 'e_fr_energy']")
                     energy = float(elem[0].text)
+                    telem = vaspout.xpath("//time[@name = 'totalsc']")
+                    tottime = float(telem[0].text.split()[0])
                     
 
                 s = j-(NoP+1)/2
@@ -223,6 +225,7 @@ for i in range(1, ECs+1):
                 entry = et.SubElement(selm, Dstn_num)
                 entry.set('strain', str(strain))
                 entry.set('energy', str(energy))
+                entry.set('tottime', str(tottime))
                 entry.set('dst', str(i))
                 entry.set('number', str(j))
                 #####################
