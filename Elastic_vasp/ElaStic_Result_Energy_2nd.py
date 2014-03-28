@@ -15,9 +15,10 @@
 #        ElaStic_Result_Energy_2nd
 #
 # EXPLANATION:
-# 
+# If you use vast_T mode you have to specify the Temperature index from 'F_VT' as command line argument!!!
 #________________________________________________________________________________________________________________________________
-
+import matplotlib.pyplot as plt
+import lxml.etree as et
 from sys   import stdin
 from numpy import *
 import numpy as np
@@ -26,6 +27,8 @@ import os.path
 import shutil
 import math
 import time
+import json
+import collections
 import sys
 import os
 
@@ -151,7 +154,7 @@ class RESULT():
         l3  = INFO.readline()
         cod = l3.split()[-1]
         
-        if (cod != 'WIEN2k' and cod != 'exciting' and cod != 'ESPRESSO' and cod != 'vasp'):
+        if (cod != 'WIEN2k' and cod != 'exciting' and cod != 'ESPRESSO' and cod != 'vasp' and cod != 'vasp_T'):
             sys.exit('\n.... Oops ERROR: The DFT code is NOT clear !?!?!?'\
                      '\n                 Something is WRONG in the "INFO_ElaStic" file.\n')
         
@@ -255,7 +258,10 @@ class RESULT():
         
             for k in range(0, len(eta_ene)-1, 2):
                 if (-mdri <= float(eta_ene[k]) and float(eta_ene[k]) <= mdri):
-                    strain.append(float(eta_ene[k+0]))        
+                    if i==1:
+                        strain.append(float(eta_ene[k+0])*1.00)             #correction for lagrangian strain !!!
+                    else:
+                        strain.append(float(eta_ene[k+0]))        
                     energy.append(float(eta_ene[k+1]))
         
             if (len(strain) < ordri+1):  
@@ -264,11 +270,12 @@ class RESULT():
         
             coeffs = np.polyfit(strain, energy, ordri)
             A2.append(coeffs[ordri-2])
-        
+            
+            
         A2 = np.array(A2)
         if (len(A2) != ECs):
             sys.exit('\n.... Oops ERROR: The number of data in the "ElaStic_2nd.in" is NOT equal to '+str(ECs)+'\n')
-        
+        print A2
         C = zeros((6,6))
         #%%%--- Cubic structures ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if (LC == 'CI' or \
@@ -423,7 +430,7 @@ class RESULT():
             CONV = cnvrtr * 1.
         if (cod == 'ESPRESSO'):
             CONV = cnvrtr * 1.
-        if (cod == 'vasp'):
+        if (cod == 'vasp') or (cod == 'vasp_T'):
             CONV = cnvrtr * 1.
         for i in range(5):
             for j in range(i+1,6):
@@ -509,4 +516,22 @@ class RESULT():
         fo.close()
         #--------------------------------------------------------------------------------------------------------------------------------
         os.chdir('../')
+        ####### Write T dependent Elastic Constants to json file ########
+        if cod=='vasp_T':
+            T = int(sys.argv[1])
+            dict = {}
+            f= open('F_TV','r')
+            freeE = f.readlines()
+            f.close()
+            T_F = freeE[T].split()
+            dict[T_F[0]] = {'C11':C[0,0],'C12':C[0,1],'C44':C[3,3],'F':T_F[1]}
+            if not os.path.exists('out.json'): 
+                f_new = open('out.json','w')
+                f_new.write('{}')
+                f_new.close()
+            with open('out.json') as f2:
+                data = json.load(f2)
+            data.update(dict)
+            with open('out.json','w') as f2:
+                json.dump(data, f2)
         os.system('cp -f Energy-vs-Strain/ElaStic_2nd.out .')

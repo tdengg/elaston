@@ -80,7 +80,7 @@ if (mthd != 'Stress' and mthd != 'Energy'):
 l3  = INFO.readline()
 cod = l3.split()[-1]
 
-if (cod != 'WIEN2k' and cod != 'exciting' and cod != 'ESPRESSO' and cod != 'vasp'):
+if (cod != 'WIEN2k' and cod != 'exciting' and cod != 'ESPRESSO' and cod != 'vasp' and cod != 'vasp_T'):
     sys.exit('\n.... Oops ERROR: The DFT code is NOT clear !?!?!?'\
              '\n                 Something is WRONG in the "INFO_ElaStic" file.\n')
 
@@ -91,7 +91,7 @@ l5  = INFO.readline()
 V0  = float(l5.split()[-2])
 
 l6  = INFO.readline()
-mdr = float(l6.split()[-1])
+mdr_elastic = float(l6.split()[-1])
 
 l7  = INFO.readline()
 NoP = int(l7.split()[-1])
@@ -159,7 +159,7 @@ else: sys.exit('\n.... Oops ERROR: WRONG Space-Group Number !?!?!?    \n')
 #--------------------------------------------------------------------------------------------------
 
 #%!%!%--- Reading the energies ---%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%!%
-if (cod=='vasp'):
+if (cod=='vasp') or (cod=='vasp_T'):
     xmlf = open('Energy.xml', 'w')
     root = et.Element("Energy_Strain")
 
@@ -173,7 +173,8 @@ for i in range(1, ECs+1):
     os.chdir(Dstn)
 
     f = open(Dstn+'_Energy.dat', 'w')
-    if (cod=='vasp'):   selm = et.SubElement(root, Dstn)
+    if (cod=='vasp') or (cod=='vasp_T'):   selm = et.SubElement(root, Dstn)
+    
     
     for j in range(1, NoP+1):
         if (j<10):
@@ -187,6 +188,7 @@ for i in range(1, ECs+1):
             if (cod=='exciting'): energy_output = 'INFO.OUT'
             if (cod=='ESPRESSO'): energy_output = Dstn_num+'.out'
             if (cod=='vasp'    ): energy_output = 'vasprun.xml'
+            if (cod=='vasp_T'  ): energy_output = 'F_TV'
 
             if (os.path.exists(energy_output)):
                 if (cod == 'WIEN2k'):
@@ -208,11 +210,65 @@ for i in range(1, ECs+1):
                     vaspout = et.parse('vasprun.xml')
                     elem = vaspout.xpath("//scstep[last()]/energy/i[@name = 'e_fr_energy']")
                     energy = float(elem[0].text)
-                    telem = vaspout.xpath("//time[@name = 'totalsc']")
-                    tottime = float(telem[0].text.split()[0])
                     
+                    telem = vaspout.xpath("//time[@name = 'totalsc']")
+                    try:
+                        tottime = float(telem[0].text.split()[0])
+                    except:
+                        tottime = float(0.)
+                if (cod == 'vasp_T'):
+                    
+                    cell = 125.#supercell size
+                    T=int(sys.argv[1]) #coose temp index.
+                    
+                    vaspout = et.parse('vasprun.xml')
+                    elem = vaspout.xpath("//scstep/energy/i[@name = 'e_fr_energy']")
+                    allengys = []
+                    for k in elem:
+                        try:
+                            allengys.append(float(k.text))
+                        except:
+                            allengys.append(0.)
+                    
+                    trueengys = []
+                    for engy in allengys:
+                        if engy < -1000. and engy > -3000.: trueengys.append(engy)
+                    gsenergy = trueengys[-1]/cell
+                    
+                    telem = vaspout.xpath("//time[@name = 'totalsc']")
+                    
+                    try:
+                        tottime = float(telem[0].text.split()[0])
+                    except:
+                        tottime = 0.
+                    
+                    
+                    g = open(energy_output)
+                    fenergy = float(g.readlines()[T].split()[1])/96.47244
+                    g.close()
+                    
+                    energy = gsenergy+fenergy+13.5
 
                 s = j-(NoP+1)/2
+                
+                if cod=='vasp_T' and i==1:
+                    
+                    f1 = open('../../strain')
+                    straindata = f1.readline().split()
+                    f1.close()
+                    epsilon = float(straindata[2])
+                    if s<0:
+                        sroots = 2.*np.roots([1,1,-epsilon/2.])
+                        for sroot in sroots: 
+                            if sroot>0.: mdr = sroot
+                    
+                    if s>=0:
+                        sroots = 2.*np.roots([-1,1,-epsilon/2.])
+                        for sroot in sroots: 
+                            if sroot>0.: mdr = sroot
+                else: 
+                    mdr = mdr_elastic
+                
                 r = 2*mdr*s/(NoP-1)
                 if (s==0): r=0.0001
 
@@ -232,7 +288,7 @@ for i in range(1, ECs+1):
             os.chdir('../')
     f.close()
     os.chdir('../')
-if (cod=='vasp'):
+if (cod=='vasp') or (cod=='vasp_T'):
     xmlf.write(et.tostring(root, pretty_print=True))
     xmlf.close()
 #--------------------------------------------------------------------------------------------------
@@ -258,7 +314,7 @@ if (cod == 'WIEN2k'):
     CONV = ToGPa * factorial(ordr)*1.
 if (cod == 'exciting'):
     CONV = ToGPa * factorial(ordr)*2.
-if (cod == 'vasp'):
+if (cod == 'vasp') or (cod == 'vasp_T'):
     CONV = vToGPa * factorial(ordr)*2.
 if (cod == 'ESPRESSO'):
     CONV = ToGPa * factorial(ordr)*1.
@@ -398,9 +454,9 @@ for i in range(1, ECs+1):
         print >>GdE, TMP[l],
     GdE.close()
 
-    os.system('xmgrace '+ Dstn +'_d'+str(ordr)+'E.dat -param '  + \
-                          Dstn +'_d'+str(ordr)+'E.par -saveall '+ \
-                          Dstn+'_d'+str(ordr)+'E.agr &')
+    #os.system('xmgrace '+ Dstn +'_d'+str(ordr)+'E.dat -param '  + \
+    #                      Dstn +'_d'+str(ordr)+'E.par -saveall '+ \
+    #                      Dstn+'_d'+str(ordr)+'E.agr &')
 
     TMP = []
     for k in range(154, 162):
@@ -419,7 +475,7 @@ for i in range(1, ECs+1):
         print >>CVe, TMP[k],
     CVe.close()
 
-    os.system('xmgrace '+ Dstn +'_CVe.dat -param '+ Dstn +'_CVe.par -saveall '+ Dstn +'_CVe.agr &')
+    #os.system('xmgrace '+ Dstn +'_CVe.dat -param '+ Dstn +'_CVe.par -saveall '+ Dstn +'_CVe.agr &')
 
 os.chdir('../')
 

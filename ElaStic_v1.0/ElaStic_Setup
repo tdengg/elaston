@@ -37,7 +37,8 @@ print '\
 \n     Quantum ESPRESSO --=>  3                                     \
 \n     VASP      ---------=>  4'
 
-num = input('>>>> Please choose (1, 2, 3 or 4): ')
+#num = input('>>>> Please choose (1, 2, 3 or 4): ')
+num = 4
 if (num != 1 and num != 2 and num != 3 and num !=4 ):
     sys.exit('\n.... Oops ERROR: Choose 1, 2, 3, or 4 \n')
 

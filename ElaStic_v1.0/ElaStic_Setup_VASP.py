@@ -154,7 +154,8 @@ class SETUP(object):
         #%%%--- Reading the method of the elastic constants calculations ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         print '\n     Energy  ---=>  1    \
                \n     Stress  ---=>  2    '
-        num = input('>>>> Please choose the method of the calculation (choose 1 or 2): ')
+        #num = input('>>>> Please choose the method of the calculation (choose 1 or 2): ')
+        num = 1
         if (num != 1 and num != 2):
             sys.exit("\n     ... Oops ERROR: Choose '1' or '2' \n")
         if (num == 1 ): mthd = 'Energy'
@@ -165,15 +166,15 @@ class SETUP(object):
         #%%%--- Reading the order of the elastic constants ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         print '\n     2nd  ---=>  2    \
                \n     3rd  ---=>  3    '
-        ordr = input('>>>> Please choose the order of the elastic constant (choose \'2\' or \'3\'): ')
-        
+        #ordr = input('>>>> Please choose the order of the elastic constant (choose \'2\' or \'3\'): ')
+        ordr = 2
         if (ordr != 2 and ordr != 3 ):
             sys.exit("\n     ... Oops ERROR: Choose '2' or '3' \n")
         #--------------------------------------------------------------------------------------------------
         
         #%%%--- Checking the input file exist ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        INF = raw_input('\n>>>> Please enter the vasp POSCAR file name: ')
-        
+        #INF = raw_input('\n>>>> Please enter the vasp POSCAR file name: ')
+        INF = 'POSCAR'
         if (os.path.exists(INF) == False):
             sys.exit('\n    ... Oops ERROR: There is NO file with "'+ INF +'" name !?!?!?    \n')
         #--------------------------------------------------------------------------------------------------
@@ -271,8 +272,9 @@ class SETUP(object):
         
         #%%%--- Reading the maximum Lagrangian strain ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         if (mthd == 'Energy'):
-            mdr = input('\n>>>> Please enter the maximum Lagrangian strain '\
-                        '\n     The suggested value is between 0.030 and 0.150: ')
+            #mdr = input('\n>>>> Please enter the maximum Lagrangian strain '\
+            #            '\n     The suggested value is between 0.030 and 0.150: ')
+            mdr = 0.05
         if (mthd == 'Stress'):
             mdr = input('\n>>>> Please enter the maximum Lagrangian strain '\
                         '\n     The suggested value is between 0.0010 and 0.0050: ')
@@ -285,9 +287,9 @@ class SETUP(object):
         #--------------------------------------------------------------------------------------------------
         
         #%%%--- Reading the number of the distorted structures ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        NoP = input('>>>> Please enter the number of the distorted structures [odd number > 4]: ')
-        NoP = int(abs(NoP))
-        
+        #NoP = input('>>>> Please enter the number of the distorted structures [odd number > 4]: ')
+        #NoP = int(abs(NoP))
+        NoP = 21
         if (NoP < 5):
             sys.exit('\n     ... Oops ERROR: The NUMBER of the distorted structures < 5 !!!!!!    \n')
         if (99 < NoP):
@@ -368,7 +370,7 @@ class SETUP(object):
             if (ordr == 2):
                 if (LC == 'CI' or \
                     LC == 'CII'):
-                    Lag_strain_list = ['08','23']#['01','08','23']
+                    Lag_strain_list = ['01','08','23']
                 if (LC == 'HI' or \
                     LC == 'HII'):
                     Lag_strain_list = ['01','26','04','03','17']

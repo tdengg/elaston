@@ -51,7 +51,7 @@ f.close()
 
 #phonon.plot_thermal_properties().show()
 
-phonon.plot_total_DOS().show()
+#phonon.plot_total_DOS().show()
 phonon.write_total_DOS()
 
 phonon.write_yaml_thermal_properties()
