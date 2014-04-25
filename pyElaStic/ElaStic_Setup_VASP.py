@@ -35,6 +35,7 @@ from numpy import *
 import numpy as np
 import os.path
 import shutil
+import json
 import glob
 import math
 import sys
@@ -43,8 +44,8 @@ import os
 import vaspIO
 
 class SETUP(object):
-    def __init__(self):
-        conserveV = True
+    def __init__(self, conserveV = False):
+        
         #%%%--- DICTIONARIS ---%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         Ls_Dic={                       \
         '01':[ 1., 1., 1., 0., 0., 0.],\

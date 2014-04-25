@@ -5,7 +5,7 @@ from phonopy.structure.atoms import Atoms as PhonopyAtoms
 import numpy as np
 import lxml.etree as etree
 from phonopy.interface import vasp
-
+print vasp.__file__
 ###read force constants from vasprun.xml###
 vasprun = etree.iterparse('vasprun.xml', tag='varray')
 fc = vasp.get_force_constants_vasprun_xml(vasprun)

@@ -5,10 +5,10 @@ import numpy as np
 import lxml.etree as et
 
 class PLOT_THERMAL(object):
-	def __init__(self, dir):
+	def __init__(self, dir, style='-'):
 		self.dir = dir
 		self._lname = None
-	
+		self.style = style
 		self.conv = 96.47244
 
 	def get_data(self):
@@ -103,7 +103,7 @@ class PLOT_THERMAL(object):
 		alpha = []
 		for i in range(len(trange)-1):
 			alpha.append((minl[i+1]-minl[i])/(trange[i+1]-trange[i])/minl[0]*10**6.)
-		plt.plot(trange[:-1], alpha, label = self._lname, lw=2.)
+		plt.plot(trange[:-1], alpha, label = self._lname, lw=2., ls=self.style)
 	
 	@property
 	def lname(self):

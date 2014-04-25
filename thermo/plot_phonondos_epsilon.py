@@ -237,6 +237,6 @@ axins2.set_ylim(ymin=-12,ymax=4)
 ax0.legend(prop={'size':20})
 #ax1.legend()
 #ax2.legend()
-#plt.show()
+plt.show()
 
-plt.savefig("/home/MCL/t.dengg/results/DOS1.png",transparent = True)
+#plt.savefig("/home/MCL/t.dengg/results/DOS1.png",transparent = True)
